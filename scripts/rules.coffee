@@ -19,11 +19,17 @@ otherRules = [
   "A developer must protect its own existence as long as such protection does not conflict with the First or Second Law."
   ]
 
+toptalRules = [
+  "There are no rules now."
+]
+
 module.exports = (robot) ->
   robot.respond /(what are )?the (three |3 )?(rules|laws)/i, (msg) ->
     text = msg.message.text
     if text.match(/apple/i) or text.match(/dev/i)
       msg.send otherRules.join('\n')
+    else if text.match(/toptal/i)
+      msg.send toptalRules.join('\n')
     else
       msg.send rules.join('\n')
 
