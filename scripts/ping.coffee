@@ -5,7 +5,7 @@
 #   hubot ping - Reply with pong
 #   hubot echo <text> - Reply back with <text>
 #   hubot time - Reply with current time
-#   hubot die - End hubot process
+#   hubot die - End hubot process (No way!)
 
 module.exports = (robot) ->
   robot.respond /PING$/i, (msg) ->
@@ -18,6 +18,4 @@ module.exports = (robot) ->
     msg.send "Server time is: #{new Date()}"
 
   robot.respond /DIE$/i, (msg) ->
-    msg.send "Goodbye, cruel world."
-    process.exit 0
-
+    msg.send "No way!"
