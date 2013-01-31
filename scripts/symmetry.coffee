@@ -19,13 +19,6 @@
 
 GitHubApi = require 'node-github'
 
-github = new GitHubApi
-  version: "3.0.0"
-
-github.authenticate
-  type: 'oauth'
-  token: process.env.GITHUB_TOKEN
-
 
 Array::difference = (arr) ->
   @filter (el) ->
@@ -101,6 +94,7 @@ format_message = (overall, commits, missings) ->
   format_fname = (fname) -> "`#{fname}`"
 
   message = []
+  are_there_problems = commits.map((c) -> c.problems?.length).every((x) -> !x? || x == 0)
   if !overall.length and !commits.length and !missings.length
     message.push "Good job, no problems were found in this pull request."
   else
@@ -129,10 +123,19 @@ format_message = (overall, commits, missings) ->
 
 
 review_pull_request = (owner, repo, pr_number) ->
+  github = new GitHubApi
+    version: "3.0.0"
+
+  github.authenticate
+    type: 'oauth'
+    token: process.env.HUBOT_GITHUB_TOKEN
+
   pr_id =
     user:   owner
     repo:   repo
     number: pr_number
+
+  console.log pr_id
 
   github.pullRequests.getCommits pr_id, (err, commits) ->
     return console.log err  if err
@@ -143,15 +146,19 @@ review_pull_request = (owner, repo, pr_number) ->
       missings           = find_missing_tests files
 
       pr_id.body = format_message overall, commits, missings
-      github.issues.createComment pr_id
+      github.issues.createComment pr_id, (err) ->
+        console.log err  if err
 
 
 module.exports = (robot) ->
-
   robot.router.post "/symmetry/pull_request", (req, res) ->
-    review_pull_request req.body.action.pull_request.repo.owner.login, req.body.action.pull_request.repo.name, req.body.action.number
-    res.end()
 
-  robot.respond /review pull request (.+) (.+) (\d+)/i, (msg) ->
-    msg.send "Thank you, pull request is scheduled for review."
+    if req.body.action is 'opened'
+      repo = req.body.pull_request.base.repo
+      review_pull_request repo.owner.login, repo.name, req.body.number
+
+    res.end 'Done motherfuckers'
+
+  robot.respond /review pull request ([^\s]+) ([^\s]+) (\d+)/i, (msg) ->
+    msg.send "Thank you, pull request is scheduled for review"
     review_pull_request msg.match[1], msg.match[2], msg.match[3]
