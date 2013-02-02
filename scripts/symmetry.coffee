@@ -95,7 +95,7 @@ format_message = (overall, commits, missings) ->
 
   message = []
   are_there_problems = commits.map((c) -> c.problems?.length).every((x) -> !x? || x == 0)
-  if !overall.length and !commits.length and !missings.length
+  if !overall.length and !are_there_problems and !missings.length
     message.push "Good job, no problems were found in this pull request."
   else
 
