@@ -96,7 +96,7 @@ module.exports = (robot) ->
     if robot.brain.data.untouchables? and who in robot.brain.data.untouchables
       robot.brain.data.untouchables.splice robot.brain.data.untouchables.indexOf(who), 1
 
-    if robot.brain.data.ignores? and who in robot.brain.data.ignores
+    if robot.brain.data.ignores? and who of robot.brain.data.ignores
       delete robot.brain.data.ignores[who]
 
     msg.send "This guy #{who} I think I saw him, but I completely forgot about him."
