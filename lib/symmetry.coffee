@@ -21,7 +21,7 @@ find_missing_tests = (changed_files) ->
   app_files.difference(spec_files).map((i) -> "app#{i}")
 
 
-find_problems = (commits) ->
+find_problems = (commits, ignores = []) ->
   get_symmetry = (message) ->
     ///^\[
       s([\w,]+)
@@ -39,7 +39,7 @@ find_problems = (commits) ->
   for commit in commits
     commit.problems = []
     message = commit.commit.message
-    continue  if is_merge message
+    continue  if is_merge(message) or 'symmetry badge' in ignores
 
     [_, s, m, r] = get_symmetry message
     unless s? and m? and r?

@@ -16,3 +16,7 @@ describe 'String::trunc', ->
 
 	it 'should truncate and add ellipsis to the string longer than n', ->
 		"meow meow".trunc(4).should.equal "meow..."
+
+describe 'String::strip', ->
+	it 'should remove whitespaces sourunding string only', ->
+		"  pew  meow  ".strip().should.equal "pew  meow"

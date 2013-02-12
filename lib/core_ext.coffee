@@ -4,3 +4,6 @@ Array::difference = (arr) ->
 
 String::trunc = (n) ->
   @substr(0, n) + (if @length > n then '...' else '')
+
+String::strip = ->
+  @replace /^\s+|\s+$/g, ''

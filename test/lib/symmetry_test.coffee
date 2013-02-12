@@ -96,6 +96,16 @@ describe ".find_problems", ->
 
 		overall.length.should.equal 0
 
+	it "should not warn about missed bages if this is added to ignore", ->
+		[_, commits] = symmetry.find_problems [
+			{commit: {message: '[sY:mY:rY] howdy?'}},
+			{commit: {message: "scenario for developer activity link to partner"}},
+			{commit: {message: "something is missing here"}},
+			{commit: {message: "Merge pull request #13"}}], ['symmetry badge']
+
+		for i in [0..3]
+			commits[i].problems.length.should.equal 0
+
 
 describe ".find_missing_tests", ->
 	it "should return list of files with missing tests", ->
