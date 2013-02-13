@@ -53,19 +53,21 @@ describe ".find_problems", ->
 		overall.length.should.equal 0
 		commits.length.should.equal 0
 
-	it "should find commits without badge, but ignore merge commits", ->
+	it "should find commits without badge, but ignore merge and revert commits", ->
 		[_, commits] = symmetry.find_problems [
 			{commit: {message: '[sY:mY:rY] howdy?'}},
 			{commit: {message: "scenario for developer activity link to partner"}},
+			{commit: {message: 'Revert "meow meow"'}},
 			{commit: {message: "something is missing here"}},
 			{commit: {message: "Merge pull request #13"}}]
 
 		commits[0].problems.length.should.equal 0
 		commits[1].problems.length.should.equal 1
 		commits[1].problems[0].should.equal "No symmetry badge found."
-		commits[2].problems.length.should.equal 1
-		commits[2].problems[0].should.equal "No symmetry badge found."
-		commits[3].problems.length.should.equal 0
+		commits[2].problems.length.should.equal 0
+		commits[3].problems.length.should.equal 1
+		commits[3].problems[0].should.equal "No symmetry badge found."
+		commits[4].problems.length.should.equal 0
 
 	it "should notice if commit wasn't reviewed or tested or both", ->
 		[_, commits] = symmetry.find_problems [

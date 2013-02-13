@@ -34,12 +34,15 @@ find_problems = (commits, ignores = []) ->
   is_merge = (message) ->
     /^Merge (pull request #|remote-tracking branch '|branch ')/.test message
 
+  is_revert = (message) ->
+    /^Revert "/.test message
+
   overall = []
   ls = rs = 0
   for commit in commits
     commit.problems = []
     message = commit.commit.message
-    continue  if is_merge(message) or 'symmetry badge' in ignores
+    continue  if is_merge(message) or is_revert(message) or 'symmetry badge' in ignores
 
     [_, s, m, r] = get_symmetry message
     unless s? and m? and r?
