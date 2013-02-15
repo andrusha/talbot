@@ -86,6 +86,7 @@ module.exports = (robot) ->
       robot.brain.data.ignores      ?= {}
       robot.brain.data.ignores[who] ?= []
       robot.brain.data.ignores[who].push what
+    robot.brain.save()
 
     for_what = if what then " about #{what}." else "."
     msg.send "Yes, my master. I'll never bother #{who} again#{for_what}"
@@ -98,5 +99,6 @@ module.exports = (robot) ->
 
     if robot.brain.data.ignores? and who of robot.brain.data.ignores
       delete robot.brain.data.ignores[who]
+    robot.brain.save()
 
     msg.send "This guy #{who} I think I saw him, but I completely forgot about him."
