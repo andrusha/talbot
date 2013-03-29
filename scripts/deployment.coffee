@@ -30,10 +30,10 @@ reponame = (user, repo, env) ->
 
 init = (cb) ->
   # heroku doesn't have bundler inside of it by-default so we have to install it manually
-  exec_in_env "gem install bundler", (error, stdout, stderr) ->
+  exec "mkdir -p #{tmp_dir()}", (error, stdout, stderr) ->
     return cb(error, stdout, stderr)  if error
 
-    exec "mkdir -p #{tmp_dir()}", cb
+    exec_in_env "gem install bundler", cb
 
 cleanup = (repo, cb) ->
   exec "rm -rf #{tmp_dir repo} #{tmp_dir repo}.tar #{tmp_dir '.gems'}", cb
