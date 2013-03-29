@@ -7,3 +7,6 @@ String::trunc = (n) ->
 
 String::strip = ->
   @replace /^\s+|\s+$/g, ''
+
+String::lines = ->
+  @split /\r?\n/
